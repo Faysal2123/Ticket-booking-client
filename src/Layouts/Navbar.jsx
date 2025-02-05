@@ -1,9 +1,10 @@
 import React from "react";
+import { Link, NavLink } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <div>
-      <div className="navbar bg-base-100 shadow-sm">
+    <div className="md:w-11/12 mx-auto">
+      <div className="navbar bg-base-100 ">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -25,32 +26,46 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+              className=" text-base font-semibold menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
             >
               <li>
-                <a>Item 1</a>
+                <NavLink to='/'>Home</NavLink>
               </li>
               
               <li>
-                <a>Item 3</a>
+                <NavLink to='/flights'>Flights</NavLink>
               </li>
+              <li>
+                <NavLink to='/dashboard'>Dashboard</NavLink>
+              </li>
+              <li>
+                <NavLink to='contact'>Contact Us</NavLink>
+              </li>
+             
             </ul>
           </div>
-          <a className="btn btn-ghost text-xl">daisyUI</a>
+          <a className="btn btn-ghost md:text-3xl text-2xl font-extrabold">TicketEase</a>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
-            <li>
-              <a>Item 1</a>
-            </li>
-            
-            <li>
-              <a>Item 3</a>
-            </li>
+          <ul className="menu menu-horizontal px-1 text-base font-semibold ">
+          <li>
+                <NavLink to='/'>Home</NavLink>
+              </li>
+              
+              <li>
+                <NavLink to='/flights'>Flights</NavLink>
+              </li>
+              <li>
+                <NavLink to='/dashboard'>Dashboard</NavLink>
+              </li>
+              <li>
+                <NavLink to='contact'>Contact Us</NavLink>
+              </li>
           </ul>
         </div>
-        <div className="navbar-end">
-          <a className="btn">Button</a>
+        <div className="navbar-end gap-2">
+         <Link to='/login' className="btn btn-accent text-white font-bold">Login</Link>
+         <Link to='/register' className="btn btn-error text-white font-bold">Registration</Link>
         </div>
       </div>
     </div>
