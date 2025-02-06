@@ -1,22 +1,47 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { FaGoogle } from 'react-icons/fa';
 import RegisterAnimation from '../assets/lottie/Animation1.json'
 import Lottie from 'react-lottie-player';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { AuthContext } from '../Provider/AuthProvider';
+import toast, { Toaster } from 'react-hot-toast';
 
 
 const Register = () => {
+  const {createUser,googleSignIn,setUser}=useContext(AuthContext)
+  const navigate=useNavigate()
     const {
         register,
         handleSubmit,
-        watch,
+       
         formState: { errors },
       } = useForm()
+      const handleGoogleSignUp=async()=>{
+        try{
+          const result=await googleSignIn()
+          const user=result.user
+          setUser(user)
+        }
+        catch(err){
+          toast.error(err?.message);
+        }
+      }
     
-      const onSubmit = (data) => console.log(data)
+      const onSubmit = (data) =>{
+        createUser(data.email,data.password)
+        .then((result)=>{
+          const loggedUser=result.user
+         console.log(loggedUser)
+        })
+        setTimeout(()=>{
+          navigate('/')
+          
+        },1000)
+        toast.success('Registration Successful')
+      }
     return (
-        <div className='flex md:flex-row flex-col justify-center md:pt-20 pt-6'>
+        <div className='flex md:flex-row flex-col justify-center md:pt-20 pt-6 md:mb-10 mb-10'>
              <div className='flex justify-center'>
                 <Lottie loop animationData={RegisterAnimation} play className='md:h-[500px] md:w-[400px] h-[200px] w-[200px]' />
                 </div>
@@ -58,9 +83,10 @@ const Register = () => {
         <div className="divider">OR</div>
         </div>
         <div>
-            <button className='btn btn-outline btn-error w-full'><FaGoogle></FaGoogle></button>
+            <button onClick={handleGoogleSignUp} type='button' className='btn btn-outline btn-error w-full'><FaGoogle></FaGoogle></button>
         </div>
       </form>
+      <Toaster></Toaster>
     </div>
         </div>
     );

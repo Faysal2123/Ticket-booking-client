@@ -1,19 +1,43 @@
-import React from "react";
+import React, { useContext } from "react";
 import LoginAnimation from "../assets/lottie/Animation2.json"
 import Lottie from "react-lottie-player";
 import { FaGoogle } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { set, useForm } from "react-hook-form";
+import { AuthContext } from "../Provider/AuthProvider";
+import toast, { Toaster } from "react-hot-toast";
 
 const Login = () => {
+  const{signIn,setUser,googleSignIn}=useContext(AuthContext)
+  const navigate=useNavigate()
     const {
         register,
         handleSubmit,
         watch,
         formState: { errors },
       } = useForm()
+      const handleGoogleSignIn=async()=>{
+        try{
+          const result=await googleSignIn()
+          const user=result.user
+          setUser(user)
+        }
+        catch(err){
+          toast.error(err?.message)
+        }
+      }
     
-      const onSubmit = (data) => console.log(data)
+      const onSubmit = (data) => {
+        signIn(data.email,data.password)
+        .then(result=>{
+          const user=result.user
+          console.log(user)
+          setTimeout(()=>{
+            navigate('/')
+          },1000)
+          toast.success("Login Successful")
+        })
+      }
   return (
     <div className='flex md:flex-row flex-col justify-center md:pt-20 pt-6 '>
          <div className="flex justify-center">
@@ -53,8 +77,9 @@ const Login = () => {
           </div>
           <p className="text-center pt-3 mb-3"><small>Don't have an account</small><Link className="text-red-500 ml-1" to='/register'>Register now</Link></p>
           <div className="divider">OR</div>
-          <button type="button"  className="btn btn-outline btn-accent "><FaGoogle size={20}/></button>
+          <button type="button" onClick={handleGoogleSignIn}  className="btn btn-outline btn-accent "><FaGoogle size={20}/></button>
         </form>
+        <Toaster></Toaster>
       </div>
     </div>
   );
